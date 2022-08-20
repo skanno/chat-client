@@ -1,38 +1,22 @@
+import config from './config/config.js';
 import { createRouter, createWebHistory } from 'vue-router';
 import Chat from './components/Chat.vue';
 
+let routes = [];
+routes.push({
+  path: '/',
+  redirect: '/room1'
+});
+for (let i = 1; i <= config.room_size; i++) {
+  routes.push({
+    path: `/room${i}`,
+    name: `room${i}`,
+    component: Chat,
+    props: true
+  });
+}
+
 export const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'room1',
-      component: Chat,
-      props: true
-    },
-    {
-      path: '/room2',
-      name: 'room2',
-      component: Chat,
-      props: true
-    },
-    {
-      path: '/room3',
-      name: 'room3',
-      component: Chat,
-      props: true
-    },
-    {
-      path: '/room4',
-      name: 'room4',
-      component: Chat,
-      props: true
-    },
-    {
-      path: '/room5',
-      name: 'room5',
-      component: Chat,
-      props: true
-    },
-  ]
+  routes: routes
 });

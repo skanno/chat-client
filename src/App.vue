@@ -5,20 +5,8 @@
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <router-link :to="{name: 'room1', params: {roomNo: 1}}" class="nav-link">ルーム1</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{name: 'room2', params: {roomNo: 2}}" class="nav-link">ルーム2</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{name: 'room3', params: {roomNo: 3}}" class="nav-link">ルーム3</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{name: 'room4', params: {roomNo: 4}}" class="nav-link">ルーム4</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{name: 'room5', params: {roomNo: 5}}" class="nav-link">ルーム5</router-link>
+              <li v-for="i in data.roomSize" :key="i" class="nav-item">
+                <router-link :to="{name: `room${i}`, params: {roomNo: i}}" class="nav-link">ルーム{{i}}</router-link>
               </li>
             </ul>
           </div>
@@ -30,12 +18,23 @@
 </template>
 
 <script>
+import config from './config/config.js';
 import Chat from './components/Chat.vue'
+import {reactive} from 'vue';
 
 export default {
   name: 'App',
   components: {
     Chat
+  },
+  setup(props, context) {
+    const data = reactive({
+      roomSize: config.room_size
+    });
+
+    return {
+      data
+    };
   }
-}
+};
 </script>

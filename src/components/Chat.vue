@@ -8,9 +8,9 @@
 </template>
 
 <script>
+import config from '../config/config.js';
 import {onMounted, reactive} from 'vue';
 import io from 'socket.io-client';
-import config from '../config/config.js';
 
 const ws = io(config.ws_url);
 

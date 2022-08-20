@@ -1,3 +1,4 @@
 export default {
-  ws_url: 'http://example.com:3000'
+  ws_url: 'http://example.com:3000',
+  room_size: 5
 }
