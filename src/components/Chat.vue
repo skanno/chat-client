@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul v-html="data.messages"></ul>
+    <ul class="list-group text-left" v-html="data.messages"></ul>
     <input v-model="data.sendMessage" autocomplete="off" />
     <button @click="send">Send</button>
   </div>
@@ -30,7 +30,7 @@ export default {
 
     onMounted(() => {
       ws.on('message', function(msg) {
-        data.messages += `<li>${msg}</li>`;
+        data.messages += `<li class="list-group-item">${msg}</li>`;
       });
     });
 
