@@ -9,8 +9,9 @@
 <script>
 import {onMounted, reactive} from 'vue';
 import io from 'socket.io-client';
+import config from '../config/config.js';
 
-const ws = io(`http://dev.s-kanno.net:3000`);
+const ws = io(config.ws_url);
 
 export default {
   name: 'Chat',
