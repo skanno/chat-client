@@ -1,5 +1,6 @@
 <template>
   <div>
+    ルーム{{roomNo ?? '1'}}
     <ul class="list-group text-left" v-html="data.messages"></ul>
     <input v-model="data.sendMessage" autocomplete="off" />
     <button @click="send">Send</button>
@@ -15,6 +16,12 @@ const ws = io(config.ws_url);
 
 export default {
   name: 'Chat',
+  props: {
+    roomNo: String
+  },
+  beforeRouteLeave(to, from, next) {
+    next();
+  },
   setup(props, context) {
     const data = reactive({
       sendMessage: '',
