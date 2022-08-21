@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 export const store = createStore({
   state () {
@@ -17,5 +18,8 @@ export const store = createStore({
     roomName: (state, roomName) => {
       state.roomName = roomName;
     },
-  }
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });
