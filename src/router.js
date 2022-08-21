@@ -1,11 +1,14 @@
 import config from './config/config.js';
 import { createRouter, createWebHistory } from 'vue-router';
 import Chat from './components/Chat.vue';
+import Join from './components/Join.vue';
 
 let routes = [];
 routes.push({
   path: '/',
-  redirect: '/room1'
+  name: 'join',
+  component: Join,
+  props: true
 });
 for (let i = 1; i <= config.room_size; i++) {
   routes.push({

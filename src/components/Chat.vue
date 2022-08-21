@@ -1,9 +1,24 @@
 <template>
   <div>
-    ルーム{{roomNo ?? '1'}}
-    <ul class="list-group text-left" v-html="data.messages"></ul>
-    <input v-model="data.sendMessage" autocomplete="off" />
-    <button @click="sendMessage">Send</button>
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li v-for="i in data.roomSize" :key="i" class="nav-item">
+                <router-link :to="{name: `room${i}`, params: {roomNo: i}}" class="nav-link">ルーム{{i}}</router-link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div>
+      ルーム{{roomNo ?? '1'}}
+      <ul class="list-group text-left" v-html="data.messages"></ul>
+      <input v-model="data.sendMessage" autocomplete="off" />
+      <button @click="sendMessage">Send</button>
+    </div>
   </div>
 </template>
 
@@ -27,6 +42,7 @@ export default {
   },
   setup(props, context) {
     const data = reactive({
+      roomSize: 1,
       sendMessage: '',
       roomName: 'room1',
       messages: ''
@@ -63,6 +79,8 @@ export default {
 
     onMounted(() => {
       console.log('Call, onMounted().');
+
+      data.roomSize = config.room_size;
       joinRoom(data.roomName);
 
       /**
