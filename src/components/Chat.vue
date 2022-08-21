@@ -6,7 +6,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li v-for="i in data.roomSize" :key="i" class="nav-item">
-                <router-link :to="{name: `room${i}`, params: {roomNo: i}}" class="nav-link">ルーム{{i}}</router-link>
+                <router-link :to="{name: `room${i}`, params: {roomNo: i}}" class="nav-link">room{{i}}</router-link>
               </li>
             </ul>
           </div>
@@ -14,7 +14,7 @@
       </nav>
     </div>
     <div>
-      ルーム{{roomNo ?? '1'}}
+      {{$store.state.roomName}}
       <ul class="list-group text-left" v-html="data.messages"></ul>
       <input v-model="data.sendMessage" autocomplete="off" />
       <button @click="sendMessage">Send</button>
@@ -26,6 +26,7 @@
 import config from '../config/config.js';
 import {onMounted, reactive} from 'vue';
 import io from 'socket.io-client';
+import {useStore} from 'vuex';
 
 const ws = io(config.ws_url);
 
@@ -41,10 +42,10 @@ export default {
     next();
   },
   setup(props, context) {
+    const store = useStore();
     const data = reactive({
       roomSize: 1,
       sendMessage: '',
-      roomName: 'room1',
       messages: ''
     });
 
@@ -54,7 +55,7 @@ export default {
     const joinRoom = (roomName) => {
       console.log(`Call, joinRoom(). Room Name: ${roomName}.`);
       ws.emit('join_room', roomName);
-      data.roomName = roomName;
+      store.commit('roomName', roomName);
     };
 
     /**
@@ -70,24 +71,23 @@ export default {
      * メッセージを送信します。
      */
     const sendMessage = () => {
-      console.log(`Call, sendMessage(). Room Name: ${data.roomName}. Message: ${data.sendMessage}.`);
+      console.log(`Call, sendMessage(). Room Name: ${store.state.roomName}. Message: ${data.sendMessage}.`);
       if (data.sendMessage) {
-        ws.emit('message', {roomName: data.roomName, body: data.sendMessage});
+        ws.emit('message', {roomName: store.state.roomName, body: data.sendMessage});
         data.sendMessage = '';
       }
     };
 
     onMounted(() => {
       console.log('Call, onMounted().');
-
       data.roomSize = config.room_size;
-      joinRoom(data.roomName);
+      joinRoom(store.state.roomName);
 
       /**
        * メッセージを受信します。
        */
       ws.on('message', function(msg) {
-        data.messages += `<li class="list-group-item">${msg}</li>`;
+        data.messages += `<li class="list-group-item">${store.state.loginName}: >> ${msg}</li>`;
       });
     });
 

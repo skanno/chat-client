@@ -2,23 +2,25 @@
   <div>
     <h1 class="h3 mb-3 fw-normal">Chat</h1>
     <div class="form-floating">
-      <input type="text" class="form-control" id="loginName" v-model="$store.state.loginName" v-on:change="$store.commit('checkJoinButtonDisabled')" placeholder="ログイン名">
-      <label for="loginName">ログイン名</label>
+      <input type="text" class="form-control" id="loginName" v-model="$store.state.loginName" v-on:change="$store.commit('checkJoinButtonDisabled')" placeholder="Login Name">
+      <label for="loginName">Login Name</label>
     </div>
     <div class="form-floating">
       <select class="form-select" id="roomName" v-model="$store.state.roomName" v-on:change="$store.commit('checkJoinButtonDisabled')">
         <option  v-for="i in data.roomSize" :key="i" v-bind:value="`room${i}`">
-          ルーム{{i}}
+          room{{i}}
         </option>
       </select>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" v-bind:disabled="$store.state.joinButtonDisabled">入室</button>
+    <button class="w-100 btn btn-lg btn-primary" v-on:click="join" v-bind:disabled="$store.state.joinButtonDisabled">Join</button>
   </div>
 </template>
 
 <script>
 import config from '../config/config.js';
 import {onMounted, reactive} from 'vue';
+import {useRouter} from 'vue-router';
+import {useStore} from 'vuex';
 
 export default {
   name: 'Join',
@@ -26,16 +28,24 @@ export default {
     roomNo: String
   },
   setup(props, context) {
+    const router = useRouter();
+    const store = useStore();
+
     const data = reactive({
       roomSize: 1
     });
+
+    const join = () => {
+      router.push({name: store.state.roomName});
+    };
 
     onMounted(() => {
       data.roomSize = config.room_size;
     });
 
     return {
-      data
+      data,
+      join
     };
   }
 }

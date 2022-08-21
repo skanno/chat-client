@@ -13,6 +13,9 @@ export const store = createStore({
       if (state.loginName !== '' && state.roomName !== '') {
         state.joinButtonDisabled = false;
       }
-    }
+    },
+    roomName: (state, roomName) => {
+      state.roomName = roomName;
+    },
   }
 });
