@@ -3,7 +3,7 @@
     ルーム{{roomNo ?? '1'}}
     <ul class="list-group text-left" v-html="data.messages"></ul>
     <input v-model="data.sendMessage" autocomplete="off" />
-    <button @click="send">Send</button>
+    <button @click="sendMessage">Send</button>
   </div>
 </template>
 
@@ -20,22 +20,54 @@ export default {
     roomNo: String
   },
   beforeRouteLeave(to, from, next) {
+    console.log('Call, beforeRouteLeave().');
+    this.leaveRoom(from.name);
+    this.joinRoom(to.name);
     next();
   },
   setup(props, context) {
     const data = reactive({
       sendMessage: '',
+      roomName: 'room1',
       messages: ''
     });
 
-    const send = () => {
+    /**
+     * 入室します。
+     */
+    const joinRoom = (roomName) => {
+      console.log(`Call, joinRoom(). Room Name: ${roomName}.`);
+      ws.emit('join_room', roomName);
+      data.roomName = roomName;
+    };
+
+    /**
+     * 退室します。
+     */
+    const leaveRoom = (roomName) => {
+      console.log(`Call, leaveRoom(). Room Name: ${roomName}.`);
+      ws.emit('leave_room', roomName);
+      data.messages = '';
+    };
+
+    /**
+     * メッセージを送信します。
+     */
+    const sendMessage = () => {
+      console.log(`Call, sendMessage(). Room Name: ${data.roomName}. Message: ${data.sendMessage}.`);
       if (data.sendMessage) {
-        ws.emit('message', data.sendMessage);
+        ws.emit('message', {roomName: data.roomName, body: data.sendMessage});
         data.sendMessage = '';
       }
     };
 
     onMounted(() => {
+      console.log('Call, onMounted().');
+      joinRoom(data.roomName);
+
+      /**
+       * メッセージを受信します。
+       */
       ws.on('message', function(msg) {
         data.messages += `<li class="list-group-item">${msg}</li>`;
       });
@@ -43,7 +75,9 @@ export default {
 
     return {
       data,
-      send
+      joinRoom,
+      leaveRoom,
+      sendMessage
     };
   }
 }
