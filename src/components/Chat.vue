@@ -73,7 +73,11 @@ export default {
     const sendMessage = () => {
       console.log(`Call, sendMessage(). Room Name: ${store.state.roomName}. Message: ${data.sendMessage}.`);
       if (data.sendMessage) {
-        ws.emit('message', {roomName: store.state.roomName, body: data.sendMessage});
+        ws.emit('message', {
+          roomName: store.state.roomName,
+          userName: store.state.loginName,
+          body: data.sendMessage
+        });
         data.sendMessage = '';
       }
     };
