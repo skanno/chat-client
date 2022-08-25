@@ -90,6 +90,17 @@ export default {
       /**
        * メッセージを受信します。
        */
+      ws.on('message_list', function(msgList) {
+        data.messages = '';
+        msgList.forEach((msg, index) => {
+          console.log(msg);
+          data.messages += `<li class="list-group-item">${msg.user_name}: >> ${msg.message}</li>`;
+        });
+      });
+
+      /**
+       * メッセージを受信します。
+       */
       ws.on('message', function(msg) {
         data.messages += `<li class="list-group-item">${store.state.loginName}: >> ${msg}</li>`;
       });
