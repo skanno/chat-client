@@ -4,14 +4,14 @@ import createPersistedState from 'vuex-persistedstate';
 export const store = createStore({
   state () {
     return {
-      loginName: '',
+      userName: '',
       roomName: '',
       joinButtonDisabled: true
     };
   },
   mutations: {
     checkJoinButtonDisabled: (state) => {
-      if (state.loginName !== '' && state.roomName !== '') {
+      if (state.userName !== '' && state.roomName !== '') {
         state.joinButtonDisabled = false;
       }
     },

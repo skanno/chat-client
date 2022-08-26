@@ -2,8 +2,8 @@
   <div>
     <h1 class="h3 mb-3 fw-normal">Chat</h1>
     <div class="form-floating">
-      <input type="text" class="form-control" id="loginName" v-model="$store.state.loginName" v-on:change="$store.commit('checkJoinButtonDisabled')" placeholder="Login Name">
-      <label for="loginName">Login Name</label>
+      <input type="text" class="form-control" id="userName" v-model="$store.state.userName" v-on:change="$store.commit('checkJoinButtonDisabled')" placeholder="Login Name">
+      <label for="userName">Login Name</label>
     </div>
     <div class="form-floating">
       <select class="form-select" id="roomName" v-model="$store.state.roomName" v-on:change="$store.commit('checkJoinButtonDisabled')">

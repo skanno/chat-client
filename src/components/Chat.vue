@@ -28,7 +28,7 @@ import {onMounted, reactive} from 'vue';
 import io from 'socket.io-client';
 import {useStore} from 'vuex';
 
-const ws = io(config.ws_url);
+const ws = io(config.chat_server_url);
 
 export default {
   name: 'Chat',
@@ -73,10 +73,10 @@ export default {
     const sendMessage = () => {
       console.log(`Call, sendMessage(). Room Name: ${store.state.roomName}. Message: ${data.sendMessage}.`);
       if (data.sendMessage) {
-        ws.emit('message', {
+        ws.emit('send_message', {
           roomName: store.state.roomName,
-          userName: store.state.loginName,
-          body: data.sendMessage
+          userName: store.state.userName,
+          message: data.sendMessage
         });
         data.sendMessage = '';
       }
@@ -90,19 +90,19 @@ export default {
       /**
        * メッセージを受信します。
        */
-      ws.on('message_list', function(msgList) {
+      ws.on('show_old_message_list', function(messageList) {
         data.messages = '';
-        msgList.forEach((msg, index) => {
-          console.log(msg);
-          data.messages += `<li class="list-group-item">${msg.user_name}: >> ${msg.message}</li>`;
+        messageList.forEach((message, index) => {
+          console.log(message);
+          data.messages += `<li class="list-group-item">${message.userName}: >> ${message.message}</li>`;
         });
       });
 
       /**
        * メッセージを受信します。
        */
-      ws.on('message', function(msg) {
-        data.messages += `<li class="list-group-item">${store.state.loginName}: >> ${msg}</li>`;
+      ws.on('show_message', function(oneMessage) {
+        data.messages += `<li class="list-group-item">${oneMessage.userName}: >> ${oneMessage.message}</li>`;
       });
     });
 
