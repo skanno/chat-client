@@ -88,7 +88,7 @@ export default {
       joinRoom(store.state.roomName);
 
       /**
-       * メッセージを受信します。
+       * 過去のメッセージを受信します。
        */
       ws.on('show_old_message_list', function(messageList) {
         data.messages = '';
