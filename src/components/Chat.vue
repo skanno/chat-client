@@ -15,7 +15,7 @@
     </div>
     <div>
       {{$store.state.roomName}}
-      <ul class="list-group text-left" v-html="data.messages"></ul>
+      <table v-html="data.messages" class="table table-striped table-hover"></table>
       <input v-model="data.sendMessage" autocomplete="off" />
       <button @click="sendMessage">Send</button>
     </div>
@@ -45,6 +45,7 @@ export default {
     const store = useStore();
     const data = reactive({
       roomSize: 1,
+      messageList: [],
       sendMessage: '',
       messages: ''
     });
@@ -82,6 +83,19 @@ export default {
       }
     };
 
+    const refreshShowMassageList = () => {
+        data.messages = '';
+        data.messageList.forEach((message, index) => {
+          console.log(message);
+          data.messages += `
+            <tr>
+              <td class="col-md-2"><div class="float-start">${message.userName}</div></td>
+              <td class="col-md-7"><div class="float-start">${message.message}</div></td>
+              <td class="col-md-3"><div class="float-end">${message.createAt}</div></td>
+            </tr>`;
+        });
+    };
+
     onMounted(() => {
       console.log('Call, onMounted().');
       data.roomSize = config.room_size;
@@ -92,17 +106,17 @@ export default {
        */
       ws.on('show_old_message_list', function(messageList) {
         data.messages = '';
-        messageList.forEach((message, index) => {
-          console.log(message);
-          data.messages += `<li class="list-group-item">${message.userName}: >> ${message.message}</li>`;
-        });
+        data.messageList = messageList;
+        refreshShowMassageList();
       });
 
       /**
        * メッセージを受信します。
        */
       ws.on('show_message', function(oneMessage) {
-        data.messages += `<li class="list-group-item">${oneMessage.userName}: >> ${oneMessage.message}</li>`;
+        data.messageList.shift();
+        data.messageList.push(oneMessage);
+        refreshShowMassageList();
       });
     });
 
