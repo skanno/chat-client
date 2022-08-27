@@ -117,7 +117,9 @@ export default {
        * メッセージを受信します。
        */
       ws.on('show_message', function(oneMessage) {
-        data.messageList.shift();
+        if (data.messageList.length > config.message_size ) {
+          data.messageList.shift();
+        }
         data.messageList.push(oneMessage);
         refreshShowMassageList();
       });

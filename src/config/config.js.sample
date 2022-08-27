@@ -1,4 +1,5 @@
 export default {
   chat_server_url: 'http://example.com:3000',
-  room_size: 5
+  room_size: 5,
+  message_size: 25
 }
