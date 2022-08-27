@@ -8,6 +8,9 @@
               <li v-for="i in data.roomSize" :key="i" class="nav-item">
                 <router-link :to="{name: `room${i}`, params: {roomNo: i}}" class="nav-link">room{{i}}</router-link>
               </li>
+              <li class="nav-item">
+                <router-link :to="{name: 'join'}" class="nav-link">Leave</router-link>
+              </li>
             </ul>
           </div>
         </div>
