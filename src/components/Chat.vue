@@ -19,7 +19,7 @@
     <div>
       {{$store.state.roomName}}
       <table v-html="data.messages" class="table table-striped table-hover"></table>
-      <input v-model="data.sendMessage" autocomplete="off" />
+      <input v-model="data.sendMessage" @keydown.enter="sendMessage" autocomplete="off" />
       <button @click="sendMessage">Send</button>
     </div>
   </div>
